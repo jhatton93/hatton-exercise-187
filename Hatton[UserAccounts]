@@ -1,0 +1,151 @@
+package edu.cpt187.hatton.exercise6;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Scanner;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+
+public class UserAccounts 
+{
+	//declare and initialize
+	private final int NOT_FOUND = -1;
+	private final int RESET_VALUE = 0;
+	private final int MAXIMUM_RECORDS = 50;
+	private String[] userNames = new String[MAXIMUM_RECORDS];
+	private String[] passwords = new String[MAXIMUM_RECORDS];
+	private String masterFileName = "";
+	private int recordCount = 0;
+	private int searchedIndex = 0;
+
+	//constructor
+	public UserAccounts(String borrowedFileName)
+	{
+		masterFileName = borrowedFileName;
+	}//end of constructor
+
+	//setters
+
+	//assigns user account arrays
+	public void setUserAccountArrays()
+	{
+		//try block
+		try 
+		{
+			recordCount = RESET_VALUE;
+			//create instance with instantiation statement
+			Scanner infile = new Scanner(new FileInputStream(masterFileName));
+
+			//repetition structure for record count
+			while(infile.hasNext() == true && recordCount < MAXIMUM_RECORDS)
+			{
+				userNames[recordCount] = infile.next();
+				passwords[recordCount] = infile.next();
+				recordCount++;
+			}//end of while loop
+			//close the scanner/file
+			infile.close();
+		}//end of try block
+		//catch block
+		catch(IOException ex)
+		{
+			recordCount = NOT_FOUND;
+		}//end of catch block
+	}//end of user account arrays setter
+
+	//assigns searched index
+	public void setSearchedIndex(String borrowedUserName)
+	{
+		//assigns getSeqSearch to searchedIndex
+		searchedIndex = getSeqSearch(borrowedUserName);
+	}//end of searched index setter
+
+	//assigns searched index : OVERLOADED
+	public void setSearchedIndex(String borrowedUserName, String borrowedPassword)
+	{
+		//assigns getSeqSearch to searchedIndex
+		searchedIndex= getSeqSearch(borrowedUserName);
+
+		//if selection structure
+		if (searchedIndex >= RESET_VALUE && getPasswordMatch(borrowedPassword) == false)
+		{
+			//assigns NOT_FOUND to searchedIndex
+			searchedIndex = NOT_FOUND;
+		}//end of if selection structure
+	}//end of searched index setter : OVERLOADED
+
+	//assigns write one record
+	public void setWriteOneRecord(String borrowedUserName, String borrowedPassword)
+	{
+		//try block
+		try 
+		{
+			//instantiation statement
+			PrintWriter filePW = new PrintWriter(new FileWriter(masterFileName, true));
+			//print statement to write borrowed values to the file
+			filePW.printf("%s\t%s%n",borrowedUserName, borrowedPassword);
+			//closes the PrintWriter/File
+			filePW.close();
+		} //end of try block
+		catch (IOException e) 
+		{
+			
+		}//END of catch block
+	}//end of write one record setter
+
+	//getters
+
+	//gets seqSearch
+	public int getSeqSearch(String borrowedBorrowedUserName)
+	{
+		//declare and initialize local variables
+		int localIndex = 0;
+		int localFound = NOT_FOUND;
+		//while loop repetition structure
+		while (localIndex < recordCount)
+		{
+			//if selection structure
+			if(userNames[localIndex].equalsIgnoreCase(borrowedBorrowedUserName))
+			{
+				localFound = localIndex;
+				localIndex = recordCount;
+			}//end of if selection
+			//else selection
+			else
+			{
+				localIndex++;
+			}//end of else selection structure
+		}//end of while loop
+		return localFound;
+	}//end of seqSearch getter
+
+	//gets password match
+	public boolean getPasswordMatch(String borrowedBorrowedPassword)
+	{
+		return passwords[getSearchedIndex()].equals(borrowedBorrowedPassword);
+	}//end
+
+	//gets file name
+	public String getFileName()
+	{
+		return masterFileName;
+	}//end of file name getter
+
+	//gets maximum records
+	public int getMaximumRecords()
+	{
+		return MAXIMUM_RECORDS;
+	}//end of maximum records getter
+
+	//gets record count
+	public int getRecordCount()
+	{
+		return recordCount;
+	}//end of record count getter
+
+	//gets searched index
+	public int getSearchedIndex()
+	{
+		return searchedIndex;
+	}//end of searched index
+}//end of supportive class
