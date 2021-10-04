@@ -1,0 +1,73 @@
+package edu.cpt187.hatton.exercise6;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class WriteOrder 
+{
+	//declare and initialize variables
+	private boolean fileFoundFlag = false;
+	private String masterFileName = "";
+	private int recordCount = 0;
+
+	//constructor
+
+	//non default constructor
+	public WriteOrder(String borrowedFileName)
+	{
+		masterFileName = borrowedFileName;
+	}//END of non default constructor
+
+	//setters
+
+	//WriteOrder setter
+	public void setWriteOrder(int borrowedItemID, String borrowedItemName, double borrowedItemPrice
+			, int borrowedQuantity, double borrowedOrderCost)
+	{
+		//try block
+		try
+		{
+			//instantiation statement for PrintWriter
+			PrintWriter filePW = new PrintWriter(new FileWriter(masterFileName, true));
+
+			//printf statement that writes one record to the file
+			filePW.printf("%d\t%s\t%f\t%d\t%f%n", borrowedItemID, borrowedItemName, borrowedItemPrice
+					, borrowedQuantity, borrowedOrderCost);
+			//set flag to found
+			fileFoundFlag = true;
+
+			//close Scanner/file
+			filePW.close();
+
+			//increment
+			recordCount++;
+		}//END of try block
+		//catch block
+		catch (IOException ex)
+		{
+			//error is try has problems
+			fileFoundFlag = false;
+		}//END of catch
+	}//END of writeOrder setter
+
+	//getters
+
+	//gets fileFoundFlag
+	public boolean getFileFoundFlag()
+	{
+		return fileFoundFlag;
+	}//END of fileFoundFlag getter
+
+	//gets fileName
+	public String getFileName()
+	{
+		return masterFileName;
+	}//END of fileName getter
+
+	//gets recordCount
+	public int getRecordCount()
+	{
+		return recordCount;
+	}//END of recordCount getter
+}//end of supportive class
